@@ -1,0 +1,53 @@
+<style>
+.install{position:fixed;z-index:25;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));max-width:520px;margin:0 auto;background:var(--ink);color:var(--bg);border-radius:14px;padding:12px 14px;display:flex;gap:12px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.install img{width:44px;height:44px;border-radius:10px;flex:none}
+.install p{margin:0;flex:1;min-width:0;font-size:14px;line-height:1.35}
+.install p b{display:block;font-size:16px}
+.install .go{border:0;background:var(--kraft);color:#2A1D0C;font-weight:700;border-radius:10px;padding:9px 16px}
+.install .no{border:0;background:none;color:inherit;opacity:.7;font-size:24px;line-height:1;padding:4px}
+@media (display-mode: standalone){.install{display:none!important}}
+@media (prefers-reduced-motion:no-preference){.install{animation:rise .5s cubic-bezier(.2,.7,.2,1)}}
+</style>
+<div class="install" id="install" role="region" aria-label="התקנת האפליקציה" hidden>
+  <img src="icons/icon-192.png" alt="">
+  <p><b>התקינו את <span dir="ltr">YANKEE</span></b><span id="installText">פתיחה מהירה מהמסך הראשי של הטלפון.</span></p>
+  <button class="go" id="installGo">התקנה</button>
+  <button class="no" id="installNo" aria-label="לא עכשיו">×</button>
+</div>
+<script>
+(function(){
+  if('serviceWorker' in navigator){
+    addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+  }
+  const box=document.getElementById('install'),go=document.getElementById('installGo'),
+        no=document.getElementById('installNo'),txt=document.getElementById('installText');
+  const dismissed=()=>{try{return localStorage.getItem('madaf.installDismissed')==='1'}catch(e){return false}};
+  const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+  let deferred=null;
+
+  // Android / Chrome / Edge: the browser offers its own install dialog.
+  addEventListener('beforeinstallprompt',e=>{
+    e.preventDefault();deferred=e;
+    if(!dismissed()&&!standalone) box.hidden=false;
+  });
+  go.addEventListener('click',async()=>{
+    if(deferred){deferred.prompt();try{await deferred.userChoice}catch(e){}deferred=null}
+    box.hidden=true;
+  });
+  no.addEventListener('click',()=>{box.hidden=true;try{localStorage.setItem('madaf.installDismissed','1')}catch(e){}});
+  addEventListener('appinstalled',()=>{box.hidden=true});
+
+  // iPhone / iPad: Safari has no install dialog, so explain the manual steps.
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  if(ios&&!standalone&&!dismissed()){
+    txt.textContent='בספארי: לוחצים על כפתור השיתוף ואז על "הוספה למסך הבית".';
+    go.hidden=true;box.hidden=false;
+  }
+
+  // App shortcuts open ./#deals or ./#catalog
+  if(location.hash){setTimeout(()=>{const el=document.getElementById(location.hash.slice(1));if(el)el.scrollIntoView()},300)}
+
+  addEventListener('offline',()=>{if(typeof toast==='function')toast('אין חיבור לאינטרנט. הקטלוג עדיין זמין')});
+  addEventListener('online',()=>{if(typeof toast==='function')toast('החיבור חזר')});
+})();
+</script>

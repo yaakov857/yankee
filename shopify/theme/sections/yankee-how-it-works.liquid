@@ -1,0 +1,65 @@
+{%- comment -%} YANKEE "how it works": up to 4 numbered steps. {%- endcomment -%}
+{{ 'yankee.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Secular+One&family=Assistant:wght@400;600;700&display=swap">
+{%- liquid
+  assign dir = 'ltr'
+  assign rtl_langs = 'he,ar,fa,ur'
+  if rtl_langs contains request.locale.iso_code
+    assign dir = 'rtl'
+  endif
+-%}
+<div class="yk yk--{{ section.settings.color_mode }}" dir="{{ dir }}">
+  <div class="yk-wrap yk-block">
+    {%- if section.settings.heading != blank -%}
+      <div class="yk-block__head"><h2>{{ section.settings.heading | escape }}</h2></div>
+    {%- endif -%}
+    <ol class="yk-steps">
+      {%- for block in section.blocks -%}
+        <li {{ block.shopify_attributes }}>
+          <span class="yk-step-n">{{ forloop.index }}</span>
+          <b>{{ block.settings.title | escape }}</b>
+          <p>{{ block.settings.text | escape }}</p>
+        </li>
+      {%- endfor -%}
+    </ol>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "YANKEE – איך זה עובד",
+  "tag": "section",
+  "class": "yk-section",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "select", "id": "color_mode", "label": "מצב צבעים", "default": "auto",
+      "options": [
+        { "value": "auto", "label": "לפי המכשיר (כהה או בהיר)" },
+        { "value": "light", "label": "תמיד בהיר" },
+        { "value": "dark", "label": "תמיד כהה" }
+      ]
+    },
+    { "type": "text", "id": "heading", "label": "כותרת", "default": "איך זה עובד" }
+  ],
+  "blocks": [
+    {
+      "type": "step", "name": "שלב",
+      "settings": [
+        { "type": "text", "id": "title", "label": "כותרת השלב", "default": "שלב" },
+        { "type": "textarea", "id": "text", "label": "הסבר" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "YANKEE – איך זה עובד",
+      "blocks": [
+        { "type": "step", "settings": { "title": "מזמינים באתר", "text": "בוחרים מוצרים ומשלמים בכרטיס אשראי, או לשליח במסירה." } },
+        { "type": "step", "settings": { "title": "אורזים במחסן", "text": "ההזמנה מגיעה אלינו מיד, נארזת ומקבלת מספר הזמנה." } },
+        { "type": "step", "settings": { "title": "מגיעים בחלון שבחרתם", "text": "חלונות של 4 שעות, ראשון עד חמישי. ביום שישי רק בבוקר." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

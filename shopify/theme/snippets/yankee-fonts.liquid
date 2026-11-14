@@ -1,0 +1,12 @@
+{%- comment -%}
+  Optional: YANKEE fonts for the whole store (Secular One for headings, Assistant for text).
+  To use it, add this one line in layout/theme.liquid, just before </head>:
+    {% render 'yankee-fonts' %}
+{%- endcomment -%}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Secular+One&family=Assistant:wght@400;600;700&display=swap">
+<style>
+  body { font-family: "Assistant", system-ui, "Segoe UI", Arial, sans-serif; }
+  h1, h2, h3, .h0, .h1, .h2, .h3 { font-family: "Secular One", "Assistant", system-ui, sans-serif; font-weight: 400; letter-spacing: 0; }
+</style>

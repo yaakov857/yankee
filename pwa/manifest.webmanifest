@@ -1,0 +1,24 @@
+{
+  "id": "./",
+  "name": "YANKEE – משלוחים עד הבית",
+  "short_name": "YANKEE",
+  "description": "חנות מוצרים לבית עם משלוח עד הדלת: קטלוג, עגלה, בחירת חלון משלוח ומעקב.",
+  "lang": "he",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F3F5F8",
+  "theme_color": "#16213A",
+  "categories": ["shopping"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "מבצעי השבוע", "url": "./#deals", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "הקטלוג המלא", "url": "./#catalog", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}
