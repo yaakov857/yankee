@@ -1,0 +1,22 @@
+# Netlify settings for YANKEE.
+# The app is already built into the pwa folder (pwa-src\build.ps1 on Windows), so Netlify only publishes it.
+[build]
+  publish = "pwa"
+  command = ""
+
+# The service worker and the product/settings files must never be cached for long,
+# so price changes and new versions reach customers right away.
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
